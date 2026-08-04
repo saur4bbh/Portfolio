@@ -16,6 +16,11 @@ const DATA = {
   // or replace this with a Google Drive / Dropbox link.
   resumeUrl: "assets/resume.pdf",
 
+  // Master playback volume for the hero videos (0–1).
+  // 0.3 matches the level Netflix uses for its autoplaying preview trailers.
+  // Any profile can override this with its own `volume`.
+  volume: 0.3,
+
   links: {
     linkedin: "https://linkedin.com/in/saurabh318/",
     leetcode: "https://leetcode.com/u/saurabh348/",
@@ -29,7 +34,11 @@ const DATA = {
       id: "recruiter",
       name: "Recruiter",
       avatarClass: "av-recruiter",
+      avatarImg: "assets/icons/recruiter_icon.jpeg",
+      videoFile: "assets/video/recruiter_video.mp4",
       video: { id: "sqyde2jcLdQ", start: 0, end: 30 },
+      startMuted: false,          // recruiter opens with sound
+
       title: "SAURABH SINGH",
       meta: ["98% Match", "2026", "ML Engineering", "4 Seasons", "HD"],
       badges: ["Machine Learning", "Deep Learning", "MLOps"],
@@ -46,7 +55,13 @@ const DATA = {
       id: "developer",
       name: "Developer",
       avatarClass: "av-developer",
+      avatarImg: "assets/icons/developer_icon.jpg",
+      videoFile: "assets/video/developer_video.mp4",
       video: { id: "IU-dnL1hJ1Q", start: 123, end: 153 },
+      startMuted: false,          // opens with sound
+      // this clip is mixed hot — 60% quieter than the global level
+      volume: 0.12,
+
       title: "SAURABH SINGH",
       meta: ["Python", "C++", "SQL", "PyTorch", "HD"],
       badges: ["PyTorch", "Kubernetes", "FastAPI"],
@@ -62,7 +77,11 @@ const DATA = {
       id: "stalker",
       name: "Stalker",
       avatarClass: "av-stalker",
+      avatarImg: "assets/icons/stalker_icon.jpg",
+      videoFile: "assets/video/stalker_video.mp4",
       video: { id: "A953td1sKS8", start: 50, end: 80 },
+      startMuted: false,          // opens with sound
+
       title: "SAURABH SINGH",
       meta: ["Lodz, Poland", "Chess", "Rubik's Cube", "C1 English"],
       badges: ["Chess", "Rubik's Cube", "Volunteering"],

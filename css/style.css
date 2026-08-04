@@ -42,10 +42,20 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
   display:grid;place-items:center;
   overflow:hidden;
 }
-.intro.done{animation:introOut .9s var(--ease) forwards}
-@keyframes introOut{to{opacity:0;visibility:hidden;transform:scale(1.15)}}
+.intro.done{animation:introOut .9s cubic-bezier(.4,0,.6,1) forwards}
+@keyframes introOut{to{opacity:0;visibility:hidden;transform:scale(1.06)}}
 
-.intro-inner{position:relative;display:grid;place-items:center}
+/* Slow push-in across the whole intro — the camera move Netflix uses under
+   its title. Barely perceptible frame to frame, obvious in aggregate. */
+.intro-inner{
+  position:relative;display:grid;place-items:center;
+  animation:introPush var(--total,4s) cubic-bezier(.22,.6,.3,1) forwards;
+  will-change:transform;
+}
+@keyframes introPush{
+  from{transform:scale(1.055)}
+  to  {transform:scale(1)}
+}
 
 /* Both layers share identical type metrics and identical per-letter arch
    transforms, so they superimpose exactly. The strand layer sits on top
@@ -62,22 +72,40 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
   white-space:pre;
   margin:0;
 }
+/* The solid mark is WIPED IN top-to-bottom by a soft-edged mask that trails
+   just behind the travelling light — so the light appears to leave finished
+   letters in its wake, instead of the mark crossfading in at the end.      */
 .intro-name{
   color:var(--red);
-  opacity:0;                     /* revealed at the resolve */
-  text-shadow:0 0 42px rgba(229,9,20,.45);
+  text-shadow:0 0 0 rgba(229,9,20,0);
+  transition:text-shadow .55s cubic-bezier(.2,.7,.2,1);
 }
-.intro.resolve .intro-name{animation:markResolve .42s cubic-bezier(.2,.7,.2,1) forwards}
-@keyframes markResolve{
-  from{opacity:0}
-  to  {opacity:1}
+/* per-letter, so each glyph fills in on the same L→R stagger as the light */
+.intro-name .ltr-in{
+  display:inline-block;
+  -webkit-mask-image:linear-gradient(180deg,
+    #000 0%, #000 38%, rgba(0,0,0,.55) 46%, rgba(0,0,0,.12) 53%, transparent 60%);
+          mask-image:linear-gradient(180deg,
+    #000 0%, #000 38%, rgba(0,0,0,.55) 46%, rgba(0,0,0,.12) 53%, transparent 60%);
+  -webkit-mask-size:100% 260%;  mask-size:100% 260%;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:0 -160%; mask-position:0 -160%;
+  animation:markWipe var(--sweep,1.05s) cubic-bezier(.33,.03,.25,1) var(--wipe-delay,0ms) forwards;
+  will-change:mask-position;
 }
+@keyframes markWipe{
+  from{-webkit-mask-position:0 -160%; mask-position:0 -160%}
+  to  {-webkit-mask-position:0 0;     mask-position:0 0}
+}
+/* soft bloom in the glyphs themselves once the wipe completes — a glow,
+   not a full-screen flash */
+.intro.resolve .intro-name{text-shadow:0 0 58px rgba(229,9,20,.55)}
 
 .intro-strandtext{
   position:absolute;top:0;left:0;
   pointer-events:none;
 }
-.intro.resolve .intro-strandtext{animation:strandsOut .34s ease-out forwards}
+.intro.resolve .intro-strandtext{animation:strandsOut var(--resolve,.42s) cubic-bezier(.3,.1,.4,1) forwards}
 @keyframes strandsOut{to{opacity:0}}
 
 /* One nested pair per character:
@@ -99,50 +127,38 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
 .intro-strandtext .ltr-in{
   display:inline-block;
   background-image:
-    /* the travelling highlight */
+    /* the travelling highlight — long, soft falloff so it glides */
     linear-gradient(180deg,
       transparent 0%,
-      rgba(255,60,60,.35) 26%,
-      rgba(255,150,140,.95) 46%,
-      #ffffff 50%,
-      rgba(255,150,140,.95) 54%,
-      rgba(255,60,60,.35) 74%,
+      rgba(190,20,30,.20) 18%,
+      rgba(255,80,75,.62) 38%,
+      rgba(255,190,185,.96) 48%,
+      #fff5f4 50%,
+      rgba(255,190,185,.96) 52%,
+      rgba(255,80,75,.62) 62%,
+      rgba(190,20,30,.20) 82%,
       transparent 100%),
-    /* the strands themselves */
+    /* the filaments — finer and denser than before */
     repeating-linear-gradient(90deg,
-      rgba(229,9,20,.92) 0px, rgba(229,9,20,.92) 3px,
-      rgba(120,4,10,.35) 3px, rgba(120,4,10,.35) 4px,
-      rgba(229,9,20,.92) 4px, rgba(229,9,20,.92) 7px,
-      transparent 7px, transparent 9px);
-  background-size:100% 62%, 100% 100%;
+      rgba(229,9,20,.95) 0px, rgba(229,9,20,.95) 2px,
+      rgba(140,5,12,.45) 2px, rgba(140,5,12,.45) 3px,
+      rgba(229,9,20,.95) 3px, rgba(229,9,20,.95) 5px,
+      rgba(90,3,8,.30) 5px,   rgba(90,3,8,.30) 6px);
+  background-size:100% 78%, 100% 100%;
   background-repeat:no-repeat, repeat;
-  background-position:0 -70%, 0 0;
+  background-position:0 -85%, 0 0;
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
   -webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 14px rgba(229,9,20,.55));
-  animation:strandFall 1.05s cubic-bezier(.32,.02,.24,1) forwards;
+  filter:drop-shadow(0 0 16px rgba(229,9,20,.5));
+  /* duration is re-timed in app.js to match the intro sound's length */
+  animation:strandFall var(--sweep,1.05s) cubic-bezier(.37,.01,.28,1) forwards;
+  will-change:background-position;
 }
 @keyframes strandFall{
-  0%  {background-position:0 -70%, 0 0}
-  100%{background-position:0 170%, 0 0}
-}
-
-/* the "ta-dum" bloom — fires the instant the strands resolve to solid */
-.intro-flash{
-  position:absolute;inset:-25%;
-  background:radial-gradient(circle at 50% 50%,
-    rgba(255,255,255,.9) 0%, rgba(255,80,70,.5) 28%, transparent 66%);
-  opacity:0;transform:scale(.5);
-  pointer-events:none;mix-blend-mode:screen;
-}
-.intro-flash.play{animation:flashBoom .6s cubic-bezier(.16,.9,.3,1) forwards}
-@keyframes flashBoom{
-  0%  {opacity:0;   transform:scale(.5)}
-  14% {opacity:.95; transform:scale(1)}
-  40% {opacity:.4;  transform:scale(1.3)}
-  100%{opacity:0;   transform:scale(1.6)}
+  0%  {background-position:0 -85%, 0 0}
+  100%{background-position:0 185%, 0 0}
 }
 
 /* subtle breathing vignette, like a projector warming up */
@@ -150,6 +166,7 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
   position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(120% 90% at 50% 55%,transparent 40%,rgba(0,0,0,.65) 100%);
 }
+
 
 /* ===================================================== PROFILE GATE ==== */
 .gate{
@@ -199,8 +216,14 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
 .gate-hint{margin-top:2.6rem;color:var(--dim);font-size:.9rem}
 
 /* avatar art */
-.av{background:var(--bg-3)}
+.av{background:var(--bg-3);overflow:hidden}
 .av svg{width:52%;height:52%;fill:rgba(0,0,0,.72)}
+/* profile pictures fill the tile edge to edge, cropped square like Netflix's */
+.av img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  display:block;border-radius:inherit;
+}
 .av-recruiter{background:linear-gradient(145deg,#f5c518,#e0850b)}
 .av-developer{background:linear-gradient(145deg,#3ecf8e,#0b7a54)}
 .av-stalker  {background:linear-gradient(145deg,#e50914,#7a0209)}

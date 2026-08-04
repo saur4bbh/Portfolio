@@ -32,6 +32,17 @@
 
   const AV_ICON = { recruiter: ICON.user, developer: ICON.code, stalker: ICON.eye };
 
+  /* Avatar contents for a profile: its picture if one is configured, else the
+     built-in glyph. If the image 404s or is corrupt, onerror swaps the glyph
+     back in so a broken-image box can never appear. */
+  function avatarInner(p) {
+    const glyph = AV_ICON[p.id] || ICON.user;
+    if (!p.avatarImg) return glyph;
+    return `<img src="${esc(p.avatarImg)}" alt="" loading="lazy"
+                 onerror="this.parentNode.innerHTML=this.dataset.fb"
+                 data-fb="${esc(glyph)}">`;
+  }
+
   /* ============================================================= INTRO == */
   /* Netflix wordmark arch. Measured off the real logo: the cap-line is
      essentially flat and the baseline curves UP toward the centre, with the
@@ -65,30 +76,54 @@
     });
   }
 
+  /* How long the whole opening animation runs, in ms. */
+  const INTRO_MS = 2800;
+
   function playIntro() {
     const brand = DATA.brand;
     const n = brand.length;
+    const intro = $("#intro");
 
     buildWordmark($("#introStrandText"), brand, true);   // light-strand layer
     buildWordmark($("#introName"), brand, false);        // solid layer
 
-    // the last letter's strand sweep (1.05s) finishes here
-    const sweepEndMs = (n - 1) * 55 + 1050;
-    // the mark resolves from strands to solid, with the bloom on the same frame
-    const resolveAtMs = sweepEndMs - 120;
-    // hold on the finished wordmark, then fade through to the profile gate
-    const dwellMs = resolveAtMs + 420 + 700;
+    /* Every beat is derived from one total duration — change INTRO_MS and
+       the sweep, stagger, wipe and hold all rescale together.               */
+    function run(totalMs) {
+      const T = Math.max(2200, Math.min(7000, totalMs));
 
-    setTimeout(() => {
-      $("#intro").classList.add("resolve");
-      $("#introFlash").classList.add("play");
-    }, resolveAtMs);
+      const sweepMs   = Math.round(T * 0.46);   // light travelling down strands
+      const staggerMs = Math.round(T * 0.09);   // spread of the L→R offset
+      const perLetter = n > 1 ? staggerMs / (n - 1) : 0;
+      const resolveMs = Math.round(T * 0.15);   // strands dissolving away
+      // the solid mark is wiped in just behind the light, not after it
+      const wipeLagMs = Math.round(T * 0.045);
+      const sweepEnd  = sweepMs + staggerMs + wipeLagMs;
+      const fadeMs    = 900;
+      const dwellMs   = Math.max(sweepEnd + resolveMs, T - fadeMs);
 
-    setTimeout(() => {
-      $("#intro").classList.add("done");
-      setTimeout(() => { $("#intro").hidden = true; }, 900);
-      openGate();
-    }, dwellMs);
+      intro.style.setProperty("--total", T + "ms");
+      intro.style.setProperty("--sweep", sweepMs + "ms");
+      intro.style.setProperty("--resolve", resolveMs + "ms");
+
+      $$("#introStrandText .ltr-in").forEach((el, i) => {
+        el.style.animationDelay = Math.round(i * perLetter) + "ms";
+      });
+      // solid letters wipe in on the same stagger, one lag behind the light
+      $$("#introName .ltr-in").forEach((el, i) => {
+        el.style.setProperty("--wipe-delay", Math.round(i * perLetter + wipeLagMs) + "ms");
+      });
+
+      setTimeout(() => { intro.classList.add("resolve"); }, sweepEnd);
+
+      setTimeout(() => {
+        intro.classList.add("done");
+        setTimeout(() => { intro.hidden = true; }, 900);
+        openGate();
+      }, dwellMs);
+    }
+
+    run(INTRO_MS);
   }
 
   /* ============================================================== GATE == */
@@ -103,7 +138,7 @@
     list.innerHTML = DATA.profiles.map((p) => `
       <li>
         <button data-profile="${p.id}">
-          <span class="av ${p.avatarClass}">${AV_ICON[p.id] || ICON.user}</span>
+          <span class="av ${p.avatarClass}">${avatarInner(p)}</span>
           <span class="nm">${esc(p.name)}</span>
         </button>
       </li>`).join("");
@@ -159,7 +194,7 @@
       }).join("");
 
     $("#sidebarAvatar").className = "av " + profile.avatarClass;
-    $("#sidebarAvatar").innerHTML = AV_ICON[profile.id] || ICON.user;
+    $("#sidebarAvatar").innerHTML = avatarInner(profile);
     $("#sidebarProfileName").textContent = profile.name;
 
     $("#btnResume").href = DATA.resumeUrl;
@@ -427,7 +462,7 @@
   }
 
   /* ============================================================ VIDEO === */
-  /* Priority: local assets/video/<profile>.mp4  →  YouTube embed  →  poster */
+  /* Priority: local file (profile.videoFile)  →  YouTube embed  →  poster */
 
   /* Sound is ON by default. Autoplay-with-audio is blocked by browsers, so
      every source starts muted (which is always allowed to autoplay) and is
@@ -436,15 +471,22 @@
      to reality rather than lying about the state. */
   let ytPlayer = null, ytTimer = null, localVideo = null, muted = false;
 
+  // per-profile `volume` wins, else the global one, else a safe default
+  const VOL = () => {
+    if (profile && profile.volume != null) return profile.volume;
+    return DATA.volume != null ? DATA.volume : 0.3;
+  };
+
   function syncSoundIcon() {
     $("#btnSound").innerHTML = muted ? ICON.muted : ICON.sound;
   }
 
   function applyDesiredVolume() {
-    if (localVideo) localVideo.muted = muted;
+    if (localVideo) { localVideo.volume = VOL(); localVideo.muted = muted; }
     if (ytPlayer && ytPlayer.unMute) {
+      if (ytPlayer.setVolume) ytPlayer.setVolume(Math.round(VOL() * 100));
       if (muted) ytPlayer.mute();
-      else { ytPlayer.unMute(); if (ytPlayer.setVolume) ytPlayer.setVolume(100); }
+      else ytPlayer.unMute();
       // the player may veto the unmute — reflect whatever actually happened
       setTimeout(() => {
         if (ytPlayer && ytPlayer.isMuted) { muted = ytPlayer.isMuted(); syncSoundIcon(); }
@@ -455,7 +497,11 @@
 
   function mountVideo() {
     stopVideo();
-    const src = `assets/video/${profile.id}.mp4`;
+    // each profile decides whether it opens with sound (see data.js)
+    muted = !!profile.startMuted;
+    syncSoundIcon();
+    // explicit path from data.js, else the old <profile-id>.mp4 convention
+    const src = profile.videoFile || `assets/video/${profile.id}.mp4`;
     fetch(src, { method: "HEAD" })
       .then((r) => {
         const ok = r.ok && !/text\/html/i.test(r.headers.get("content-type") || "");
@@ -473,8 +519,9 @@
     $("#heroVideo").innerHTML = "";
     $("#heroVideo").appendChild(v);
     localVideo = v;
+    v.volume = VOL();
     v.play()
-      .then(() => { v.muted = muted; syncSoundIcon(); })   // unmute once rolling
+      .then(() => { v.volume = VOL(); v.muted = muted; syncSoundIcon(); })
       .catch(() => showPoster());
   }
 
@@ -640,15 +687,22 @@
   }
 
   /* -------------------------------------------------------------- boot -- */
-  document.addEventListener("DOMContentLoaded", () => {
+  let booted = false;
+
+  function boot() {
+    if (booted) return;              // must never run twice: a second pass
+    booted = true;                   // would see introSeen and skip the intro
     wire();
-    // Skip the intro on repeat visits within the same tab session.
-    if (sessionStorage.getItem("introSeen")) {
-      $("#intro").hidden = true;
-      openGate();
-    } else {
-      sessionStorage.setItem("introSeen", "1");
-      playIntro();
-    }
-  });
+    // The intro plays on every load. It used to be skipped for the rest of
+    // the tab session, which meant a reload silently dropped both the
+    // animation and its sting — the exact reason the sound seemed missing.
+    playIntro();
+  }
+
+  // if the script lands after parsing is done, DOMContentLoaded already fired
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 })();
