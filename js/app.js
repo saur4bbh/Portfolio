@@ -10,46 +10,94 @@
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   /* ---------------------------------------------------------- icon set -- */
+  /* Bold, solid, single-color glyphs in the same visual language Netflix's
+     own product uses (thick simple shapes, no fine detail, reads at 20px). */
   const ICON = {
-    home:   '<svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v10h-5v-6H11v6H6V11H3z"/></svg>',
-    work:   '<svg viewBox="0 0 24 24"><path d="M10 4h4a2 2 0 012 2v1h4a2 2 0 012 2v9a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2h4V6a2 2 0 012-2zm0 3h4V6h-4v1z"/></svg>',
-    skills: '<svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.5L21 9.8l-4.7 4.3 1.3 6.4L12 17.2 6.4 20.5l1.3-6.4L3 9.8l6.4-1.3z"/></svg>',
-    code:   '<svg viewBox="0 0 24 24"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6zm5.2 0l4.6-4.6L14.6 7.4 16 6l6 6-6 6z"/></svg>',
-    mail:   '<svg viewBox="0 0 24 24"><path d="M3 5h18a1 1 0 011 1v12a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1zm9 8l8-5H4z"/></svg>',
-    cert:   '<svg viewBox="0 0 24 24"><path d="M12 2a6 6 0 016 6 6 6 0 01-3 5.2V22l-3-2-3 2v-8.8A6 6 0 016 8a6 6 0 016-6z"/></svg>',
-    star:   '<svg viewBox="0 0 24 24"><path d="M12 2l2.6 6.5L21 9.8l-4.7 4.3 1.3 6.4L12 17.2 6.4 20.5l1.3-6.4L3 9.8l6.4-1.3z"/></svg>',
-    quote:  '<svg viewBox="0 0 24 24"><path d="M7 7h5v5H9.5c0 2 .9 3 2.5 3v3c-3.5 0-5-2.4-5-6zm10 0h5v5h-2.5c0 2 .9 3 2.5 3v3c-3.5 0-5-2.4-5-6z"/></svg>',
-    cap:    '<svg viewBox="0 0 24 24"><path d="M12 3l11 6-11 6L1 9zm-6 9.7l6 3.3 6-3.3V17c0 1.7-2.7 3-6 3s-6-1.3-6-3z"/></svg>',
-    user:   '<svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-5 0-9 2.7-9 6v2h18v-2c0-3.3-4-6-9-6z"/></svg>',
-    eye:    '<svg viewBox="0 0 24 24"><path d="M12 5C6.5 5 2.3 8.6 1 12c1.3 3.4 5.5 7 11 7s9.7-3.6 11-7c-1.3-3.4-5.5-7-11-7zm0 11a4 4 0 110-8 4 4 0 010 8z"/></svg>',
-    sound:  '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zm12.5 3a4 4 0 00-2-3.5v7A4 4 0 0016.5 12z"/></svg>',
-    muted:  '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zm14.6 3l2.2-2.2-1.4-1.4L17.2 10.6 15 8.4 13.6 9.8l2.2 2.2-2.2 2.2 1.4 1.4 2.2-2.2 2.2 2.2 1.4-1.4z"/></svg>'
+    home:   '<svg viewBox="0 0 24 24"><path d="M12 2.6L2 11h3v10h5.2v-6.4h3.6V21H19V11h3z"/></svg>',
+    work:   '<svg viewBox="0 0 24 24"><path d="M9 4.5h6a2 2 0 012 2V8h2.5a1.5 1.5 0 011.5 1.5v9a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18.5v-9A1.5 1.5 0 014.5 8H7V6.5a2 2 0 012-2zM9 8h6V6.5H9V8zm-1.5 5.2h9v-2h-9v2z"/></svg>',
+    skills: '<svg viewBox="0 0 24 24"><path d="M4 20V10.5h3.4V20H4zm6.3 0V4h3.4v16h-3.4zM16.6 20v-8.6H20V20h-3.4z"/></svg>',
+    code:   '<svg viewBox="0 0 24 24"><path d="M8.6 17.4L3.2 12l5.4-5.4L10.4 8l-3.6 4 3.6 4-1.8 1.4zm6.8 0L13.6 16l3.6-4-3.6-4 1.8-1.4L20.8 12l-5.4 5.4z"/></svg>',
+    mail:   '<svg viewBox="0 0 24 24"><path d="M3 6a1.5 1.5 0 011.5-1.5h15A1.5 1.5 0 0121 6v12a1.5 1.5 0 01-1.5 1.5h-15A1.5 1.5 0 013 18V6zm2 .3V7.9l7 5 7-5V6.3l-7 5-7-5z"/></svg>',
+    cert:   '<svg viewBox="0 0 24 24"><path d="M12 2.2a5.8 5.8 0 015.8 5.8 5.8 5.8 0 01-3 5.1V22l-2.8-1.9L9.2 22v-8.9a5.8 5.8 0 01-3-5.1A5.8 5.8 0 0112 2.2zm0 2.4a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8z"/></svg>',
+    star:   '<svg viewBox="0 0 24 24"><path d="M12 2.3l2.9 6.6 7.1.7-5.4 4.8 1.6 7-6.2-3.7-6.2 3.7 1.6-7-5.4-4.8 7.1-.7z"/></svg>',
+    quote:  '<svg viewBox="0 0 24 24"><path d="M6.5 6.5h6v6.2c0 3.6-2 6-5.4 6.8l-.8-1.8c2-.6 3.1-1.8 3.3-3.4H6.5v-7.8zm9 0h6v6.2c0 3.6-2 6-5.4 6.8l-.8-1.8c2-.6 3.1-1.8 3.3-3.4h-3.1v-7.8z"/></svg>',
+    cap:    '<svg viewBox="0 0 24 24"><path d="M12 3L1.5 8.4 12 13.8l8.5-4.4V13h1.7V8.4L12 3zM5.3 11.6v4.2c0 2 3 3.6 6.7 3.6s6.7-1.6 6.7-3.6v-4.2L12 15.9l-6.7-4.3z"/></svg>',
+    user:   '<svg viewBox="0 0 24 24"><path d="M12 12.4a5.2 5.2 0 100-10.4 5.2 5.2 0 000 10.4zm0 2.2c-5.2 0-9.4 2.8-9.4 6.3V22h18.8v-1.1c0-3.5-4.2-6.3-9.4-6.3z"/></svg>',
+    eye:    '<svg viewBox="0 0 24 24"><path d="M12 4.8C6.3 4.8 2 8.7 1 12c1 3.3 5.3 7.2 11 7.2S21 15.3 22 12c-1-3.3-5.3-7.2-10-7.2zm0 12a4.8 4.8 0 110-9.6 4.8 4.8 0 010 9.6zm0-2.2a2.6 2.6 0 100-5.2 2.6 2.6 0 000 5.2z"/></svg>',
+    sound:  '<svg viewBox="0 0 24 24"><path d="M4 9.5h3.6L13 5.2v13.6l-5.4-4.3H4zM15.6 8.4a5 5 0 010 7.2l-1.3-1.3a3.2 3.2 0 000-4.6zm2.6-2.6a8.7 8.7 0 010 12.4l-1.3-1.3a6.9 6.9 0 000-9.8z"/></svg>',
+    muted:  '<svg viewBox="0 0 24 24"><path d="M4 9.5h3.6L13 5.2v13.6l-5.4-4.3H4zm14.7-1.2l1.4 1.4-2.3 2.3 2.3 2.3-1.4 1.4-2.3-2.3-2.3 2.3-1.4-1.4 2.3-2.3-2.3-2.3 1.4-1.4 2.3 2.3z"/></svg>',
+    swap:   '<svg viewBox="0 0 24 24"><path d="M7 4.2l4 4-4 4-1.4-1.4L7.2 9H2V7h5.2L5.6 5.6 7 4.2zM17 20l-4-4 4-4 1.4 1.4L16.8 15H22v2h-5.2l1.6 1.6L17 20z"/></svg>',
+    chev:   '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6-1.4-1.4L12.2 12 7.6 7.4z"/></svg>'
   };
 
   const AV_ICON = { recruiter: ICON.user, developer: ICON.code, stalker: ICON.eye };
 
   /* ============================================================= INTRO == */
-  function playIntro() {
-    const host = $("#introName");
-    [...DATA.brand].forEach((ch, i) => {
-      const s = document.createElement("span");
-      s.textContent = ch;
-      s.style.animationDelay = (i * 0.075) + "s";
-      host.appendChild(s);
-    });
+  /* Netflix wordmark arch. Measured off the real logo: the cap-line is
+     essentially flat and the baseline curves UP toward the centre, with the
+     middle letters only ~10% shorter than the outer ones. Quadratic curve,
+     not linear. Both intro layers use this so they superimpose exactly. */
+  function archTransform(i, mid) {
+    const t = Math.abs(i - mid) / mid;              // 0 centre → 1 edges
+    const scaleY = 0.90 + 0.10 * (t * t);           // 0.90 middle → 1.00 ends
+    const skew = ((i - mid) / mid) * -1.2;          // cylinder-wrap lean
+    return `scaleY(${scaleY.toFixed(3)}) skewX(${skew.toFixed(2)}deg)`;
+  }
 
-    const dwell = 300 + DATA.brand.length * 75 + 1350;
+  /** Build one arched wordmark layer. Strand layer gets staggered fill
+      animation; the solid layer is static and simply fades in later. */
+  function buildWordmark(host, brand, stagger) {
+    const mid = (brand.length - 1) / 2 || 1;
+    host.innerHTML = "";
+    [...brand].forEach((ch, i) => {
+      const outer = document.createElement("span");
+      outer.className = "ltr";
+      outer.style.transform = archTransform(i, mid);
+
+      const inner = document.createElement("span");
+      inner.className = "ltr-in";
+      inner.textContent = ch;
+      // the light reaches each letter a beat apart, left to right
+      if (stagger) inner.style.animationDelay = (i * 0.055).toFixed(3) + "s";
+
+      outer.appendChild(inner);
+      host.appendChild(outer);
+    });
+  }
+
+  function playIntro() {
+    const brand = DATA.brand;
+    const n = brand.length;
+
+    buildWordmark($("#introStrandText"), brand, true);   // light-strand layer
+    buildWordmark($("#introName"), brand, false);        // solid layer
+
+    // the last letter's strand sweep (1.05s) finishes here
+    const sweepEndMs = (n - 1) * 55 + 1050;
+    // the mark resolves from strands to solid, with the bloom on the same frame
+    const resolveAtMs = sweepEndMs - 120;
+    // hold on the finished wordmark, then fade through to the profile gate
+    const dwellMs = resolveAtMs + 420 + 700;
+
+    setTimeout(() => {
+      $("#intro").classList.add("resolve");
+      $("#introFlash").classList.add("play");
+    }, resolveAtMs);
+
     setTimeout(() => {
       $("#intro").classList.add("done");
       setTimeout(() => { $("#intro").hidden = true; }, 900);
       openGate();
-    }, dwell);
+    }, dwellMs);
   }
 
   /* ============================================================== GATE == */
   function openGate() {
-    $("#gateLogo").textContent = DATA.brand;
-    $("#appLogo").textContent  = DATA.brand;
+    // Netflix shows the full wordmark only on the splash; every other screen
+    // gets the single-letter mark. Same idea: "SAURABH" intro → "S" everywhere.
+    const initial = DATA.brand.charAt(0);
+    $("#gateLogo").textContent = initial;
+    $("#appLogo").textContent  = initial;
 
     const list = $("#gateList");
     list.innerHTML = DATA.profiles.map((p) => `
@@ -62,7 +110,8 @@
 
     list.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-profile]");
-      if (btn) enterApp(btn.dataset.profile);
+      if (!btn) return;
+      enterApp(btn.dataset.profile);
     });
 
     $("#gate").hidden = false;
@@ -94,6 +143,7 @@
     renderHire();
     $("#app").hidden = false;
     window.scrollTo(0, 0);
+    if (heroScrollApply) heroScrollApply();   // reset title scale/fade
     mountVideo();
   }
 
@@ -108,17 +158,17 @@
         return (i ? "<i></i>" : "") + `<span${cls}>${esc(m)}</span>`;
       }).join("");
 
-    $("#currentAvatar").className = "av " + profile.avatarClass;
-    $("#currentAvatar").innerHTML = AV_ICON[profile.id] || ICON.user;
+    $("#sidebarAvatar").className = "av " + profile.avatarClass;
+    $("#sidebarAvatar").innerHTML = AV_ICON[profile.id] || ICON.user;
+    $("#sidebarProfileName").textContent = profile.name;
 
     $("#btnResume").href = DATA.resumeUrl;
-    $("#tbResume").href  = DATA.resumeUrl;
 
     $("#heroPoster").style.backgroundImage =
       `url(https://i.ytimg.com/vi/${profile.video.id}/maxresdefault.jpg)`;
 
     $$(".ic").forEach((el) => { el.innerHTML = ICON[el.dataset.i] || ""; });
-    $("#btnSound").innerHTML = ICON.muted;
+    syncSoundIcon();
   }
 
   /* ---------------------------------------------------------- the rows -- */
@@ -379,7 +429,29 @@
   /* ============================================================ VIDEO === */
   /* Priority: local assets/video/<profile>.mp4  →  YouTube embed  →  poster */
 
-  let ytPlayer = null, ytTimer = null, localVideo = null, muted = true;
+  /* Sound is ON by default. Autoplay-with-audio is blocked by browsers, so
+     every source starts muted (which is always allowed to autoplay) and is
+     unmuted the instant playback begins — legal because selecting a profile
+     was a real user gesture. If a browser still refuses, the icon re-syncs
+     to reality rather than lying about the state. */
+  let ytPlayer = null, ytTimer = null, localVideo = null, muted = false;
+
+  function syncSoundIcon() {
+    $("#btnSound").innerHTML = muted ? ICON.muted : ICON.sound;
+  }
+
+  function applyDesiredVolume() {
+    if (localVideo) localVideo.muted = muted;
+    if (ytPlayer && ytPlayer.unMute) {
+      if (muted) ytPlayer.mute();
+      else { ytPlayer.unMute(); if (ytPlayer.setVolume) ytPlayer.setVolume(100); }
+      // the player may veto the unmute — reflect whatever actually happened
+      setTimeout(() => {
+        if (ytPlayer && ytPlayer.isMuted) { muted = ytPlayer.isMuted(); syncSoundIcon(); }
+      }, 300);
+    }
+    syncSoundIcon();
+  }
 
   function mountVideo() {
     stopVideo();
@@ -397,10 +469,13 @@
     v.src = src; v.muted = true; v.loop = true; v.autoplay = true;
     v.playsInline = true; v.setAttribute("playsinline", "");
     v.addEventListener("error", useYouTube, { once: true });
+    $("#heroVideo").className = "hero-video";
     $("#heroVideo").innerHTML = "";
     $("#heroVideo").appendChild(v);
     localVideo = v;
-    v.play().catch(() => showPoster());
+    v.play()
+      .then(() => { v.muted = muted; syncSoundIcon(); })   // unmute once rolling
+      .catch(() => showPoster());
   }
 
   function useYouTube() {
@@ -411,6 +486,9 @@
     }
     const { id, start, end } = profile.video;
     const mount = document.createElement("div");
+    // .yt overscales the iframe so YouTube's title/branding overlay, which
+    // sits in the top-left of the video frame, is cropped outside the hero
+    $("#heroVideo").className = "hero-video yt";
     $("#heroVideo").innerHTML = "";
     $("#heroVideo").appendChild(mount);
 
@@ -422,11 +500,12 @@
         disablekb: 1, fs: 0, iv_load_policy: 3
       },
       events: {
-        onReady: (e) => { e.target.mute(); e.target.playVideo(); hidePoster(); },
+        onReady: (e) => { e.target.playVideo(); hidePoster(); },
         onError: showPoster,
         onStateChange: (e) => {
           if (e.data === YT.PlayerState.PLAYING) {
             hidePoster();
+            applyDesiredVolume();          // unmute now that it's rolling
             clearInterval(ytTimer);
             // loop only the requested clip window
             ytTimer = setInterval(() => {
@@ -453,15 +532,64 @@
 
   function toggleSound() {
     muted = !muted;
-    if (localVideo) localVideo.muted = muted;
-    if (ytPlayer) muted ? ytPlayer.mute() : ytPlayer.unMute();
-    $("#btnSound").innerHTML = muted ? ICON.muted : ICON.sound;
+    applyDesiredVolume();
   }
 
   function replay() {
     if (localVideo) { localVideo.currentTime = 0; localVideo.play(); }
     else if (ytPlayer && ytPlayer.seekTo) { ytPlayer.seekTo(profile.video.start, true); ytPlayer.playVideo(); }
   }
+
+  /* ====================================================== HERO SCROLL === */
+  /* Netflix billboard behaviour: as you scroll off the hero, the title
+     shrinks and settles downward while everything beneath it fades away.
+     Driven off rAF so it stays smooth and never blocks the scroll thread. */
+  function initHeroScroll() {
+    const title = $("#heroTitle");
+    const sub   = $("#heroSub");
+    const kick  = $("#heroKicker");
+    const hero  = document.querySelector(".hero");
+    if (!title || !hero) return;
+
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    let ticking = false;
+
+    // smoothstep — eases in and out, no linear "sliding" feel
+    const smooth = (t) => t * t * (3 - 2 * t);
+
+    function apply() {
+      ticking = false;
+      const travel = hero.offsetHeight * 0.62;      // scroll distance to settle
+      const raw = Math.min(1, Math.max(0, window.scrollY / travel));
+      const p = smooth(raw);
+
+      // title: shrink toward bottom-left and drift down a touch
+      const scale = 1 - p * 0.34;
+      const drop  = p * 26;
+      title.style.transform = `translate3d(0,${drop.toFixed(2)}px,0) scale(${scale.toFixed(4)})`;
+
+      // supporting copy fades slightly faster than the title shrinks
+      const subP = Math.min(1, raw * 1.45);
+      const subE = smooth(subP);
+      sub.style.opacity   = (1 - subE).toFixed(3);
+      sub.style.transform = `translate3d(0,${(subE * 16).toFixed(2)}px,0)`;
+      kick.style.opacity  = (1 - Math.min(1, raw * 2.2)).toFixed(3);
+
+      // stop the faded block from swallowing clicks once invisible
+      sub.style.pointerEvents = subE > 0.96 ? "none" : "";
+    }
+
+    addEventListener("scroll", () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
+    }, { passive: true });
+    addEventListener("resize", apply, { passive: true });
+
+    apply();
+    heroScrollApply = apply;   // let profile switches re-sync it
+  }
+  let heroScrollApply = null;
 
   /* ============================================================= GLUE === */
   function wire() {
@@ -474,15 +602,12 @@
     $("#btnMore").addEventListener("click", () => openModal("profileinfo"));
     $("#btnSound").addEventListener("click", toggleSound);
     $("#btnReplay").addEventListener("click", replay);
-    $("#switchProfile").addEventListener("click", backToGate);
+    $("#sidebarSwitch").addEventListener("click", backToGate);
 
     $("#modal").addEventListener("click", (e) => { if (e.target.closest("[data-close]")) closeModal(); });
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
-    // topbar goes solid on scroll
-    addEventListener("scroll", () => {
-      $("#topbar").classList.toggle("solid", scrollY > 80);
-    }, { passive: true });
+    initHeroScroll();
 
     // sidebar: Hire Me and Home are plain anchors; the rest may not exist
     // until rows render, so resolve lazily.

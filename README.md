@@ -105,8 +105,17 @@ public GitHub repo makes you the one distributing them. The YouTube embed path
 default. If you do want local files, use footage you own or that's properly
 licensed (Pexels and Coverr have good free cinematic B-roll).
 
-Autoplay requires the video to be **muted** — that's a browser rule, not a bug.
-The speaker button in the hero unmutes on click.
+Sound is ON by default. Autoplay-with-audio is blocked by browsers, so each
+source starts muted (always permitted) and unmutes the moment playback begins —
+allowed because picking a profile was a real user gesture. If a browser still
+refuses, the speaker icon re-syncs to the true state instead of lying.
+The speaker button in the hero toggles it at any time.
+
+YouTube's title/branding overlay in the top-left of the frame can't be turned
+off by any remaining player flag. Rather than cropping the picture, `.scrim-top`
+lays a dark gradient over the top 170px of the hero, which masks that strip and
+matches the gradient Netflix runs beneath its own nav. The video itself is never
+scaled or cropped — it stays a plain 16:9 cover fill.
 
 ---
 
