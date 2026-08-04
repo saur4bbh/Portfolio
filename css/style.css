@@ -203,11 +203,14 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
   aspect-ratio:1;
   border-radius:6px;
   display:grid;place-items:center;
-  border:3px solid transparent;
-  transition:border-color .2s;
+  border:3px solid var(--accent,transparent);
+  transition:border-color .2s,box-shadow .2s;
   position:relative;overflow:hidden;
 }
-.gate-list button:hover .av{border-color:#fff}
+.gate-list button:hover .av{
+  border-color:#fff;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--accent,#fff) 35%,transparent);
+}
 .gate-list .nm{
   color:var(--dim);font-size:clamp(.95rem,1.4vw,1.2rem);
   transition:color .2s;
@@ -224,9 +227,11 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
   object-fit:cover;object-position:center;
   display:block;border-radius:inherit;
 }
-.av-recruiter{background:linear-gradient(145deg,#f5c518,#e0850b)}
-.av-developer{background:linear-gradient(145deg,#3ecf8e,#0b7a54)}
-.av-stalker  {background:linear-gradient(145deg,#e50914,#7a0209)}
+/* --accent drives the avatar border on the profile gate and the sidebar.
+   Recruiter = green, Developer = orange, Stalker = red. */
+.av-recruiter{--accent:#3ecf8e; background:linear-gradient(145deg,#3ecf8e,#0b7a54)}
+.av-developer{--accent:#f0921f; background:linear-gradient(145deg,#f5c518,#e0850b)}
+.av-stalker  {--accent:#e50914; background:linear-gradient(145deg,#e50914,#7a0209)}
 .av-recruiter svg,.av-stalker svg{fill:rgba(255,255,255,.9)}
 
 /* =============================================================== APP === */
@@ -310,7 +315,10 @@ svg{width:1em;height:1em;fill:currentColor;display:block}
   transition:background .18s,color .18s;
 }
 .sidebar-profile:hover{background:rgba(255,255,255,.1);color:#fff}
-.sidebar-profile .av{width:30px;height:30px;border-radius:4px;flex:0 0 30px}
+.sidebar-profile .av{
+  width:30px;height:30px;border-radius:4px;flex:0 0 30px;
+  border:2px solid var(--accent,transparent);
+}
 .sidebar-profile .av svg{width:56%;height:56%}
 .sp-text{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0}
 .sp-text em{
