@@ -12,7 +12,10 @@
      font stack). On Mac/iOS the --font var below resolves to true Helvetica
      Neue and this webfont never even loads visibly. -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<!-- ?v= is a cache-buster. Browsers and the GitHub Pages CDN cache CSS/JS
+     aggressively, so an edit can appear to "not deploy". Bump this number
+     whenever a change doesn't show up after pushing. -->
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
 
@@ -149,7 +152,7 @@
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
+<script src="js/data.js?v=2"></script>
+<script src="js/app.js?v=2"></script>
 </body>
 </html>
