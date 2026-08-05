@@ -128,11 +128,10 @@
 
   /* ============================================================== GATE == */
   function openGate() {
-    // Netflix shows the full wordmark only on the splash; every other screen
-    // gets the single-letter mark. Same idea: "SAURABH" intro → "S" everywhere.
-    const initial = DATA.brand.charAt(0);
-    $("#gateLogo").textContent = initial;
-    $("#appLogo").textContent  = initial;
+    // Full wordmark top-left, arched exactly like the intro. Reuses the same
+    // builder so the logo and the splash can never drift apart.
+    buildWordmark($("#gateLogo"), DATA.brand, false);
+    buildWordmark($("#appLogo"),  DATA.brand, false);
 
     const list = $("#gateList");
     list.innerHTML = DATA.profiles.map((p) => `

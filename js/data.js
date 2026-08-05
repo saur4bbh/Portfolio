@@ -17,9 +17,8 @@ const DATA = {
   resumeUrl: "assets/resume.pdf",
 
   // Master playback volume for the hero videos (0–1).
-  // 0.3 matches the level Netflix uses for its autoplaying preview trailers.
   // Any profile can override this with its own `volume`.
-  volume: 0.3,
+  volume: 0.5,
 
   links: {
     linkedin: "https://linkedin.com/in/saurabh318/",
