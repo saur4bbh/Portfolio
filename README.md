@@ -106,8 +106,9 @@ default. If you do want local files, use footage you own or that's properly
 licensed (Pexels and Coverr have good free cinematic B-roll).
 
 **Volume** is set globally by `DATA.volume` in `data.js` (currently `0.3`,
-matching Netflix's preview level). Any profile can override it with its own
-`volume` — Developer is set to `0.12` because that clip is mixed hot.
+matching Netflix's preview level) and applies to all three hero videos equally.
+Any profile can still override it with its own `volume` if one clip is mixed
+louder than the rest.
 
 **All three profiles open with sound** (`startMuted: false` in `data.js`). Set
 any of them to `true` to have that profile open muted. The speaker button in the

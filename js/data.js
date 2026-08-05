@@ -59,8 +59,6 @@ const DATA = {
       videoFile: "assets/video/developer_video.mp4",
       video: { id: "IU-dnL1hJ1Q", start: 123, end: 153 },
       startMuted: false,          // opens with sound
-      // this clip is mixed hot — 60% quieter than the global level
-      volume: 0.12,
 
       title: "SAURABH SINGH",
       meta: ["Python", "C++", "SQL", "PyTorch", "HD"],
